@@ -1,0 +1,24 @@
+{
+  "name": "sse-api-client",
+  "version": "1.0.0",
+  "description": "SSE API client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rit-sse/api-client"
+  },
+  "keywords": [
+    "SSE",
+    "api",
+    "client"
+  ],
+  "author": "Society of Software Engineers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rit-sse/api-client/issues"
+  },
+  "homepage": "https://github.com/rit-sse/api-client"
+}

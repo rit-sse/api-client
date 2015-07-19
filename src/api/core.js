@@ -1,4 +1,4 @@
-var fetch = require('ispmorphic-fetch');
+var fetch = require('isomorphic-fetch');
 
 function status(response) {
   if (response.status >= 200 && response.status < 300) {

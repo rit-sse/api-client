@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/rit-sse/api-client/issues"
   },
-  "homepage": "https://github.com/rit-sse/api-client"
+  "homepage": "https://github.com/rit-sse/api-client",
+  "dependencies": {
+    "isomorphic-fetch": "^2.1.1"
+  }
 }

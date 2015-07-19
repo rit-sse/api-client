@@ -7,5 +7,6 @@ module.exports = {
   Mentor: require('./api/mentor'),
   Officer: require('./api/officer'),
   Term: require('./api/term'),
-  Tip: require('./api/tip')
+  Tip: require('./api/tip'),
+  config: require('./api/config')
 }

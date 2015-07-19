@@ -1,26 +1,29 @@
 var core = require('./core');
-var apiRoot = require('./config').apiRoot;
-var baseEndpoint =  apiRoot + '/lingo';
+var config = require('./config');
+
+function baseEndpoint() {
+  return config.baseEndpoint('lingo')
+}
 
 module.exports = {
 
   all: function() {
-    return core.get(baseEndpoint);
+    return core.get(baseEndpoint());
   },
 
   one: function(id) {
-    return core.get(baseEndpoint + '/' + id);
+    return core.get(baseEndpoint() + '/' + id);
   },
 
   create: function(lingo) {
-    return core.post(baseEndpoint, lingo)
+    return core.post(baseEndpoint(), lingo)
   },
 
   update: function(id, lingo) {
-    return core.post(baseEndpoint + '/' + id, lingo);
+    return core.post(baseEndpoint() + '/' + id, lingo);
   },
 
   destroy: function(id) {
-    core.delete(baseEndpoint + '/' + id);
+    core.delete(baseEndpoint() + '/' + id);
   }
 }

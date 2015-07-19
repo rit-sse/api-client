@@ -1,3 +1,4 @@
+require('es6-promise').polyfill();
 var fetch = require('isomorphic-fetch');
 
 function status(response) {

@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/rit-sse/api-client",
   "dependencies": {
+    "es6-promise": "^2.3.0",
     "isomorphic-fetch": "^2.1.1"
   }
 }

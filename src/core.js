@@ -1,30 +1,11 @@
-require('es6-promise').polyfill();
-var fetch = require('isomorphic-fetch');
+var req = require('superagent');
 var url = require('url');
 
-function status(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return Promise.resolve(response);
-  } else {
-    return Promise.reject(new Error(response.statusText));
-  }
-}
-
-function json(response) {
-  return response.json();
-}
-
 function request(apiRoot, resource, method, body) {
-  return fetch(url.resolve(apiRoot, resource), {
-    method: method,
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  })
-    .then(status)
-    .then(json);
+  return req(method, url.resolve(apiRoot, resource))
+    .type('json')
+    .accept('json')
+    .send(body);
 }
 
 module.exports = function(apiRoot) {

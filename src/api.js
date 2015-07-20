@@ -17,6 +17,6 @@ module.exports = function(core, resource) {
   }
 
   this.destroy = function(id) {
-    core.delete(resource + '/' + id);
+    return core.delete(resource + '/' + id);
   }
 }

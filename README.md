@@ -2,10 +2,15 @@
 Client to the API
 
 
-To change host:
+To create an API instance:
 
 ```javascript
 var API = require('sse-api-client');
 
-API.config.apiRoot = 'http://new/api/root'
+var MyInstance = new API('http://URI/to/api/root/');
+var Members = MyInstance.Members;
+
+Members.all(function(err, res){
+    // do something
+});
 ```

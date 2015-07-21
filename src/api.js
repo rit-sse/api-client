@@ -1,15 +1,25 @@
 module.exports = function(core, resource) {
 
   this.all = function(query, callback) {
+    if(arguments.length === 1) {
+      callback = query;
+      query = {};
+    }
     return core
       .get(resource)
       .query(query)
       .end(callback);
   }
 
-  this.one = function(id, callback) {
+  this.one = function(id, query, callback) {
+    if(arguments.length === 2) {
+      callback = query;
+      query = {};
+    }
+    
     return core
       .get(resource + '/' + id)
+      .query(query)
       .end(callback);
   }
 

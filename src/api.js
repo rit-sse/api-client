@@ -1,51 +1,30 @@
+'use strict';
+
+var qs = require('qs');
+
 function API(core, resource) {
   this.core = core;
   this.resource = resource;
 }
 
-API.prototype.all = function(query, callback) {
-  // Manipulating arguments so that a user doesn't have to pass in
-  // a query object if they are not using it
-  if(arguments.length === 1) {
-    callback = query;
-    query = {};
-  }
-  return this.core
-    .get(this.resource)
-    .query(query)
-    .end(callback);
-}
+API.prototype.all = function all(query) {
+  return this.core.get(this.resource + '?' + qs.stringify(query));
+};
 
-API.prototype.one = function(id, query, callback) {
-  // Manipulating arguments so that a user doesn't have to pass in
-  // a query object if they are not using it
-  if(arguments.length === 2) {
-    callback = query;
-    query = {};
-  }
+API.prototype.one = function one(id) {
+  return this.core.get(this.resource + '/' + id);
+};
 
-  return this.core
-    .get(this.resource + '/' + id)
-    .query(query)
-    .end(callback);
-}
+API.prototype.create = function create(body) {
+  return this.core.post(this.resource, body);
+};
 
-API.prototype.create = function(body, callback) {
-    return this.core
-    .post(this.resource, body)
-    .end(callback);
-}
+API.prototype.update = function update(id, body) {
+  return this.core.put(this.resource + '/' + id, body);
+};
 
-API.prototype.update = function(id, body, callback) {
-  return this.core
-    .put(this.resource + '/' + id, body)
-    .end(callback);
-}
+API.prototype.destroy = function destroy(id) {
+  return this.core.delete(this.resource + '/' + id);
+};
 
-API.prototype.destroy = function(id, callback) {
-  return this.core
-    .delete(this.resource + '/' + id)
-    .end(callback);
-}
-
-module.exports = API
+module.exports = API;

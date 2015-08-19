@@ -1,6 +1,7 @@
 # api-client
-Client to the API
+[![Circle CI](https://circleci.com/gh/rit-sse/api-client.svg?style=svg)](https://circleci.com/gh/rit-sse/api-client)
 
+Client to the API
 
 To create an API instance:
 

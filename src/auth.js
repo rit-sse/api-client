@@ -16,4 +16,11 @@ Auth.prototype.getToken = function getToken(provider, id, secret) {
     });
 };
 
+Auth.prototype.signOut = function signOut() {
+  core.token = null;
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem('jwt');
+  }
+};
+
 module.exports = Auth;

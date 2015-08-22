@@ -12,6 +12,9 @@ function status(response) {
 }
 
 function json(response) {
+  if (response.status === 204) {
+    return Promise.resolve({});
+  }
   return response.json();
 }
 

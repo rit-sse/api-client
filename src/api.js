@@ -7,7 +7,27 @@ function API(core, resource) {
   this.resource = resource;
 }
 
-API.prototype.all = function all(query) {
+API.prototype.all = function all(query, actuallyAll) {
+  if (actuallyAll) { // Quick way to get everything unpaginated
+    query.page = 1;
+    var core = this.core;
+    var resource = this.resource;
+    return this.core.get(this.resource + '?' + qs.stringify(query))
+      .then(function get(results) {
+        var pages = Math.ceil(results.total/results.perPage);
+        var r = [results];
+        for (var i = 2; i <= pages; i++) {
+          query.page = i;
+          r.push(core.get(resource + '?' + qs.stringify(query)));
+        }
+        return Promise.all(r);
+      })
+      .then(function join(results) {
+        return results.reduce(function reduce(data, cur) {
+          return data.concat(cur.data);
+        }, []);
+      });
+  }
   return this.core.get(this.resource + '?' + qs.stringify(query));
 };
 

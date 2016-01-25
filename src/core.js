@@ -9,7 +9,7 @@ function status(response) {
   if (response.status >= 200 && response.status < 300) {
     return Promise.resolve(response);
   }
-  return Promise.reject(ResponseError.gen_error(response));
+  return ResponseError.gen_error(response);
 }
 
 function json(response) {

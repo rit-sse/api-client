@@ -8,7 +8,7 @@ function ResponseError(text, body){
 }
 
 ResponseError.gen_error = function gen_error(resp){
-  return resp.body().then(function(body){
+  return resp.text().then(function(body){
     return new ResponseError(resp.statusText, body);
   });
 }

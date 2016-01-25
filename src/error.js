@@ -11,7 +11,7 @@ function ResponseError(text, body){
 
 ResponseError.gen_error = function gen_error(resp){
   return resp.text().then(function(body){
-    return Promise.reject(new ResponseError(resp.statusText, body));
+    throw new ResponseError(resp.statusText, body);
   });
 }
 

@@ -16,7 +16,7 @@ function status(response) {
   }
   return response.json().then(
     function handleResponse(json, err) {
-      if (err){
+      if (err) {
         return response.text().then(reject);
       }
       reject(json.error);

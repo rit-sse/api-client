@@ -3,13 +3,12 @@
 var url = require('url');
 require('es6-promise').polyfill();
 var fetch = require('isomorphic-fetch');
-var ResponseError = require('./error');
 
 function status(response) {
   if (response.status >= 200 && response.status < 300) {
     return Promise.resolve(response);
   }
-  return ResponseError.gen_error(response);
+  return Promise.reject(response);
 }
 
 function json(response) {

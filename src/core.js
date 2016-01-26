@@ -5,8 +5,8 @@ require('es6-promise').polyfill();
 var fetch = require('isomorphic-fetch');
 
 function reject(val) {
-  //probably not needed
-  //hi kristen from renner
+  // probably not needed
+  // hi kristen from renner
   throw val;
 }
 
@@ -15,9 +15,10 @@ function status(response) {
     return Promise.resolve(response);
   }
   return response.json().then(
-    function(json, err) {
-      if(err)
+    function handleResponse(json, err) {
+      if (err){
         return response.text().then(reject);
+      }
       reject(json.error);
     });
 }

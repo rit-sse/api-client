@@ -4,11 +4,21 @@ var url = require('url');
 require('es6-promise').polyfill();
 var fetch = require('isomorphic-fetch');
 
+function reject(val) {
+  throw new Error(val);
+}
+
 function status(response) {
   if (response.status >= 200 && response.status < 300) {
     return Promise.resolve(response);
   }
-  return Promise.reject(new Error(response.statusText));
+  return response.json().then(
+    function handleResponse(data, err) {
+      if (err) {
+        return response.text().then(reject);
+      }
+      reject(data.error);
+    });
 }
 
 function json(response) {

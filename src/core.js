@@ -5,8 +5,6 @@ require('es6-promise').polyfill();
 var fetch = require('isomorphic-fetch');
 
 function reject(val) {
-  // probably not needed
-  // hi kristen from renner
   throw val;
 }
 
@@ -15,11 +13,11 @@ function status(response) {
     return Promise.resolve(response);
   }
   return response.json().then(
-    function handleResponse(json, err) {
+    function handleResponse(data, err) {
       if (err) {
         return response.text().then(reject);
       }
-      reject(json.error);
+      reject(data.error);
     });
 }
 
@@ -54,6 +52,7 @@ Core.prototype.request = function request(resource, method, body) {
 Core.prototype.get = function get(resource) {
   return this.request(resource, 'get');
 };
+
 Core.prototype.post = function post(resource, body) {
   return this.request(resource, 'post', body);
 };

@@ -5,7 +5,7 @@ require('es6-promise').polyfill();
 var fetch = require('isomorphic-fetch');
 
 function reject(val) {
-  throw val;
+  throw new Error(val);
 }
 
 function status(response) {

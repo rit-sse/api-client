@@ -1,5 +1,5 @@
 ---
-  extends: './node_modules/sse-eslint/.eslintrc-node'
+  extends: 'sse/node'
   env:
     browser: true
     node: true

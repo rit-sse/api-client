@@ -38,6 +38,14 @@ Auth.prototype.checkToken = function checkToken(provider) {
   }
 };
 
+Auth.prototype.clientId = function clientId() {
+  this.core.get('auth/googleClientID/').then(function getID(id) {
+    return Promise.resolve(id);
+  }).catch(function reject() {
+    return Promise.reject({});
+  });
+};
+
 Auth.prototype.signOut = function signOut() {
   this.core.token = null;
   if (typeof sessionStorage !== 'undefined') {

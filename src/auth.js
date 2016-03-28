@@ -41,8 +41,6 @@ Auth.prototype.checkToken = function checkToken(provider) {
 Auth.prototype.clientId = function clientId() {
   return this.core.get('auth/googleClientID/').then(function getID(id) {
     return Promise.resolve(id);
-  }).catch(function reject() {
-    return Promise.reject({});
   });
 };
 

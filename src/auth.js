@@ -10,16 +10,36 @@ Auth.prototype.getToken = function getToken(provider, id, secret) {
     .post('auth/' + provider, { id: id, secret: secret })
     .then(function setToken(body) {
       core.token = body.token;
-      if (typeof localStorage !== 'undefined') {
-        localStorage.setItem('jwt', core.token);
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem('jwt', core.token);
       }
     });
 };
 
+Auth.prototype.checkToken = function checkToken(provider) {
+  if (typeof sessionStorage !== 'undefined') {
+    var token = sessionStorage.getItem('jwt');
+    if (token) {
+      this.core.get('auth/' + provider).then(function(user) {
+        if (user) {
+          this.core.token = token;
+          return user;
+        } else {
+          this.core.token = null;
+          return null;
+        }
+      }).catch(function(){
+        this.core.token = null;
+        return null;
+      });
+    }
+  }
+}
+
 Auth.prototype.signOut = function signOut() {
   this.core.token = null;
-  if (typeof localStorage !== 'undefined') {
-    localStorage.removeItem('jwt');
+  if (typeof sessionStorage !== 'undefined') {
+    sessionStorage.removeItem('jwt');
   }
 };
 

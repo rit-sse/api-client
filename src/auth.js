@@ -30,8 +30,6 @@ Auth.prototype.checkToken = function checkToken(provider) {
           return Promise.resolve(user);
         }
         return Promise.reject('Token Not Valid');
-      }).catch(function reject() {
-        return Promise.reject('Server Error');
       });
     }
     return Promise.reject('No token');

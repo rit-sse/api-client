@@ -24,14 +24,17 @@ Auth.prototype.checkToken = function checkToken() {
   if (typeof sessionStorage !== 'undefined') {
     var token = sessionStorage.getItem('jwt');
     if (token) {
+      this.core.token = token;
       return this.core.get('auth/').then(function checkUser(user) {
         if (user) {
           self.core.token = token;
           return Promise.resolve(user);
         }
+        self.core.token = null;
         return Promise.reject('Token Not Valid');
       });
     }
+    this.core.token = null;
     return Promise.reject('No token');
   }
 };

@@ -28,7 +28,7 @@
     "qs": "^4.0.0"
   },
   "devDependencies": {
-    "eslint": "^1.1.0",
-    "sse-eslint": "rit-sse/eslint"
+    "eslint": "~2.2.0",
+    "eslint-config-sse": "rit-sse/eslint"
   }
 }

@@ -17,24 +17,24 @@ Auth.prototype.getToken = function getToken(provider, id, secret) {
 };
 
 Auth.prototype.checkToken = function checkToken(provider) {
+  var self = this; // I hate myself because I am what is wrong with the world
   if (typeof sessionStorage !== 'undefined') {
     var token = sessionStorage.getItem('jwt');
     if (token) {
-      this.core.get('auth/' + provider).then(function(user) {
+      this.core.get('auth/' + provider).then(function checkUser(user) {
         if (user) {
-          this.core.token = token;
+          self.core.token = token;
           return user;
-        } else {
-          this.core.token = null;
-          return null;
         }
-      }).catch(function(){
-        this.core.token = null;
+        self.core.token = null;
+        return null;
+      }).catch(function reject() {
+        self.core.token = null;
         return null;
       });
     }
   }
-}
+};
 
 Auth.prototype.signOut = function signOut() {
   this.core.token = null;

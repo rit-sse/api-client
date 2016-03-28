@@ -24,7 +24,7 @@ Auth.prototype.checkToken = function checkToken(provider) {
   if (typeof sessionStorage !== 'undefined') {
     var token = sessionStorage.getItem('jwt');
     if (token) {
-      this.core.get('auth/' + provider).then(function checkUser(user) {
+      return this.core.get('auth/' + provider).then(function checkUser(user) {
         if (user) {
           self.core.token = token;
           return Promise.resolve(user);

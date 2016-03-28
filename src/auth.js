@@ -18,13 +18,13 @@ Auth.prototype.getToken = function getToken(provider, id, secret) {
     });
 };
 
-Auth.prototype.checkToken = function checkToken(provider) {
+Auth.prototype.checkToken = function checkToken() {
   var self = this; // I hate myself because I am what is wrong with the world
   this.core.token = null;
   if (typeof sessionStorage !== 'undefined') {
     var token = sessionStorage.getItem('jwt');
     if (token) {
-      return this.core.get('auth/' + provider).then(function checkUser(user) {
+      return this.core.get('auth/').then(function checkUser(user) {
         if (user) {
           self.core.token = token;
           return Promise.resolve(user);

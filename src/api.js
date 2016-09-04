@@ -6,7 +6,7 @@ class API {
     this.resource = resource;
   }
 
-  all = (query, actuallyAll) => {
+  all(query, actuallyAll){
     if (actuallyAll) { // Quick way to get everything unpaginated
       query.page = 1;
       return this.core.get(this.resource + '?' + qs.stringify(query)).then(results => {
@@ -27,19 +27,19 @@ class API {
     return this.core.get(this.resource + '?' + qs.stringify(query));
   }
 
-  one = (id) => {
+  one(id) {
     return this.core.get(this.resource + '/' + id);
   }
 
-  create = (body) => {
+  create(body) {
     return this.core.post(this.resource, body);
   }
 
-  update = (id, body) => {
+  update(id, body) {
     return this.core.put(this.resource + '/' + id, body);
   }
 
-  destroy = (id) => {
+  destroy(id) {
     return this.core.delete(this.resource + '/' + id);
   }
 }

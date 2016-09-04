@@ -3,7 +3,7 @@ class Auth {
     this.core = core;
   }
 
-  getToken = (provider, id, secret) => {
+  getToken(provider, id, secret) {
     return this.core
       .post('auth/' + provider, { id: id, secret: secret })
       .then(body => {
@@ -14,7 +14,7 @@ class Auth {
       });
   }
 
-  checkToken = () => {
+  checkToken() {
     this.core.token = null;
     if (typeof sessionStorage !== 'undefined') {
       const token = sessionStorage.getItem('jwt');
@@ -34,11 +34,11 @@ class Auth {
     }
   }
 
-  clientId = () => {
+  clientId() {
     return this.core.get('auth/googleClientID/');
   }
 
-  signOut = () => {
+  signOut() {
     this.core.token = null;
     if (typeof sessionStorage !== 'undefined') {
       sessionStorage.removeItem('jwt');

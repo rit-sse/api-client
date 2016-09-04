@@ -29,7 +29,7 @@ class Core {
     }
   }
 
-  request = (resource, method, body) => {
+  request(resource, method, body) {
     return fetch(url.resolve(this.apiRoot, resource), {
       method: method,
       headers: {
@@ -43,19 +43,19 @@ class Core {
       .then(json);
   }
 
-  get = (resource) => {
+  get(resource) {
     return this.request(resource, 'get');
   }
 
-  post = (resource, body) => {
+  post(resource, body) {
     return this.request(resource, 'post', body);
   }
 
-  put = (resource, body) => {
+  put(resource, body) {
     return this.request(resource, 'put', body);
   }
 
-  delete = (resource) => {
+  delete(resource) {
     return this.request(resource, 'delete');
   }
 }

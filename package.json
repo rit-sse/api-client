@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src --out-dir dist",
-    "prepublish": "npm run build"
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -23,14 +23,10 @@
   },
   "homepage": "https://github.com/rit-sse/api-client",
   "dependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0",
     "es6-promise": "^3.0.2",
     "isomorphic-fetch": "^2.1.1",
     "qs": "^4.0.0"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.14.0",
-    "babel-preset-es2015": "^6.14.0",
-    "eslint": "~2.2.0",
-    "eslint-config-sse": "rit-sse/eslint"
   }
 }

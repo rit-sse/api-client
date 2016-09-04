@@ -1,7 +1,7 @@
 import qs from 'qs';
 
 class API {
-  constructor() {
+  constructor(core, resource) {
     this.core = core;
     this.resource = resource;
   }

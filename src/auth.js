@@ -1,55 +1,49 @@
-'use strict';
+class Auth {
+  constructor() {
+    this.core = core;
+  }
 
-require('es6-promise').polyfill();
+  getToken = (provider, id, secret) => {
+    return this.core
+      .post('auth/' + provider, { id: id, secret: secret })
+      .then(body => {
+        this.core.token = body.token;
+        if (typeof sessionStorage !== 'undefined') {
+          sessionStorage.setItem('jwt', this.core.token);
+        }
+      });
+  }
 
-function Auth(core) {
-  this.core = core;
+  checkToken = () => {
+    this.core.token = null;
+    if (typeof sessionStorage !== 'undefined') {
+      const token = sessionStorage.getItem('jwt');
+      if (token) {
+        this.core.token = token;
+        return this.core.get('auth/').then(user => {
+          if (user) {
+            this.core.token = token;
+            return user;
+          }
+          this.core.token = null;
+          throw new Error('Token Not Valid');
+        });
+      }
+      this.core.token = null;
+      throw new Error('No token');
+    }
+  }
+
+  clientId = () => {
+    return this.core.get('auth/googleClientID/');
+  }
+
+  signOut = () => {
+    this.core.token = null;
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.removeItem('jwt');
+    }
+  }
 }
 
-Auth.prototype.getToken = function getToken(provider, id, secret) {
-  var core = this.core;
-  return this.core
-    .post('auth/' + provider, { id: id, secret: secret })
-    .then(function setToken(body) {
-      core.token = body.token;
-      if (typeof sessionStorage !== 'undefined') {
-        sessionStorage.setItem('jwt', core.token);
-      }
-    });
-};
-
-Auth.prototype.checkToken = function checkToken() {
-  var self = this; // I hate myself because I am what is wrong with the world
-  this.core.token = null;
-  if (typeof sessionStorage !== 'undefined') {
-    var token = sessionStorage.getItem('jwt');
-    if (token) {
-      this.core.token = token;
-      return this.core.get('auth/').then(function checkUser(user) {
-        if (user) {
-          self.core.token = token;
-          return Promise.resolve(user);
-        }
-        self.core.token = null;
-        return Promise.reject('Token Not Valid');
-      });
-    }
-    this.core.token = null;
-    return Promise.reject('No token');
-  }
-};
-
-Auth.prototype.clientId = function clientId() {
-  return this.core.get('auth/googleClientID/').then(function getID(id) {
-    return Promise.resolve(id);
-  });
-};
-
-Auth.prototype.signOut = function signOut() {
-  this.core.token = null;
-  if (typeof sessionStorage !== 'undefined') {
-    sessionStorage.removeItem('jwt');
-  }
-};
-
-module.exports = Auth;
+export default Auth;

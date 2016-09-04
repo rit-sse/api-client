@@ -1,10 +1,8 @@
-'use strict';
+import api from './api';
+import Core from './core';
+import Auth from './auth';
 
-var api = require('./api');
-var Core = require('./core');
-var Auth = require('./auth');
-
-module.exports = function createAPI(apiRoot) {
+export default function createAPI(apiRoot) {
 
   var core = new Core(apiRoot);
   var API = api.bind(null, core);

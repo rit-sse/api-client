@@ -26,11 +26,11 @@ class Auth {
             return user;
           }
           this.core.token = null;
-          Promise.reject('Token Not Valid');
+          return Promise.reject('Token Not Valid');
         });
       }
       this.core.token = null;
-      Promise.reject('No token');
+      return Promise.reject('No token');
     }
   }
 

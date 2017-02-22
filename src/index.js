@@ -3,9 +3,8 @@ import Core from './core';
 import Auth from './auth';
 
 export default function createAPI(apiRoot) {
-
-  var core = new Core(apiRoot);
-  var API = api.bind(null, core);
+  const core = new Core(apiRoot);
+  const API = api.bind(null, core);
 
   this.Auth = new Auth(core);
   this.Agenda = new API('agenda');
@@ -24,4 +23,4 @@ export default function createAPI(apiRoot) {
   this.Terms = new API('terms');
   this.Tips = new API('tips');
   this.Users = new API('users');
-};
+}

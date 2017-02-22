@@ -5,8 +5,8 @@ class Auth {
 
   getToken(provider, id, secret) {
     return this.core
-      .post('auth/' + provider, { id: id, secret: secret })
-      .then(body => {
+      .post(`auth/${provider}`, { id, secret })
+      .then((body) => {
         this.core.token = body.token;
         if (typeof sessionStorage !== 'undefined') {
           sessionStorage.setItem('jwt', this.core.token);
@@ -20,7 +20,7 @@ class Auth {
       const token = sessionStorage.getItem('jwt');
       if (token) {
         this.core.token = token;
-        return this.core.get('auth/').then(user => {
+        return this.core.get('auth/').then((user) => {
           if (user) {
             this.core.token = token;
             return user;
@@ -32,6 +32,7 @@ class Auth {
       this.core.token = null;
       return Promise.reject('No token');
     }
+    return Promise.reject('No Session Storage');
   }
 
   clientId() {

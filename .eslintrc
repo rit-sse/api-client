@@ -1,5 +1,5 @@
 ---
-  extends: 'sse/node'
+  extends: 'airbnb'
   env:
     browser: true
     node: true

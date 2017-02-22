@@ -21,7 +21,7 @@ class API {
         return {
           data: results.reduce((data, cur) => {
             return data.concat(cur.data);
-          }, []);
+          }, []),
         }
       });
     }

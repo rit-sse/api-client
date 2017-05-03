@@ -17,6 +17,7 @@ module.exports = function createAPI(apiRoot) {
   this.Lingo = new API('lingo');
   this.Links = new API('links');
   this.Memberships = new API('memberships');
+  this.Scoreboard = new API('memberships/scoreboard');
   this.Mentors = new API('mentoring/mentors');
   this.Officers = new API('officers');
   this.Quotes = new API('qdb/quotes');

@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src --out-dir dist",
-    "lint":  "eslint .",
+    "lint": "eslint .",
     "postinstall": "npm run build"
   },
   "repository": {
@@ -31,9 +31,11 @@
     "qs": "^4.0.0"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
     "eslint": "^3.16.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0"
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^7.0.0"
   }
 }

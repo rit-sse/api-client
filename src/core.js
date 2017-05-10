@@ -1,68 +1,62 @@
-'use strict';
-
-var url = require('url');
-require('es6-promise').polyfill();
-var fetch = require('isomorphic-fetch');
+import url from 'url';
+import 'isomorphic-fetch';
 
 function reject(val) {
   throw new Error(val);
 }
 
 function status(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return Promise.resolve(response);
-  }
-  return response.json().then(
-    function handleResponse(data, err) {
-      if (err) {
-        return response.text().then(reject);
-      }
-      reject(data.error);
-    });
+  if (response.status >= 200 && response.status < 300) return response;
+  return response.json().then((data, err) => {
+    if (err) {
+      return response.text().then(reject);
+    }
+    return reject(data.error);
+  });
 }
 
 function json(response) {
-  if (response.status === 204) {
-    return Promise.resolve({});
-  }
+  if (response.status === 204) return {};
   return response.json();
 }
 
-function Core(apiRoot) {
-  this.apiRoot = apiRoot;
-  if (typeof localStorage !== 'undefined') {
-    this.token = localStorage.getItem('jwt');
+class Core {
+  constructor(apiRoot) {
+    this.apiRoot = apiRoot;
+    if (typeof localStorage !== 'undefined') {
+      this.token = localStorage.getItem('jwt');
+    }
+  }
+
+  request(resource, method, body) {
+    return fetch(url.resolve(this.apiRoot, resource), {
+      method,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(status)
+      .then(json);
+  }
+
+  get(resource) {
+    return this.request(resource, 'get');
+  }
+
+  post(resource, body) {
+    return this.request(resource, 'post', body);
+  }
+
+  put(resource, body) {
+    return this.request(resource, 'put', body);
+  }
+
+  delete(resource) {
+    return this.request(resource, 'delete');
   }
 }
 
-Core.prototype.request = function request(resource, method, body) {
-  return fetch(url.resolve(this.apiRoot, resource), {
-    method: method,
-    headers: {
-      Authorization: 'Bearer ' + this.token,
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  })
-    .then(status)
-    .then(json);
-};
-
-Core.prototype.get = function get(resource) {
-  return this.request(resource, 'get');
-};
-
-Core.prototype.post = function post(resource, body) {
-  return this.request(resource, 'post', body);
-};
-
-Core.prototype.put = function put(resource, body) {
-  return this.request(resource, 'put', body);
-};
-
-Core.prototype.delete = function del(resource) {
-  return this.request(resource, 'delete');
-};
-
-module.exports = Core;
+export default Core;

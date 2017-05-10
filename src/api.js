@@ -1,50 +1,46 @@
-'use strict';
+import qs from 'qs';
 
-var qs = require('qs');
+class API {
+  constructor(core, resource) {
+    this.core = core;
+    this.resource = resource;
+  }
 
-function API(core, resource) {
-  this.core = core;
-  this.resource = resource;
-}
-
-API.prototype.all = function all(query, actuallyAll) {
-  if (actuallyAll) { // Quick way to get everything unpaginated
-    query.page = 1;
-    var core = this.core;
-    var resource = this.resource;
-    return this.core.get(this.resource + '?' + qs.stringify(query))
-      .then(function get(results) {
-        var pages = Math.ceil(results.total/results.perPage);
-        var r = [results];
-        for (var i = 2; i <= pages; i++) {
+  /* eslint-disable no-param-reassign */
+  all(query, actuallyAll) {
+    if (actuallyAll) { // Quick way to get everything unpaginated
+      query.page = 1;
+      return this.core.get(`${this.resource}?${qs.stringify(query)}`).then((results) => {
+        const pages = Math.ceil(results.total / results.perPage);
+        const r = [results];
+        for (let i = 2; i <= pages; i++) { // eslint-disable-line no-plusplus
           query.page = i;
-          r.push(core.get(resource + '?' + qs.stringify(query)));
+          r.push(this.core.get(`${this.resource}?${qs.stringify(query)}`));
         }
         return Promise.all(r);
-      })
-      .then(function join(results) {
-        return results.reduce(function reduce(data, cur) {
-          return data.concat(cur.data);
-        }, []);
-      });
+      }).then(results => ({
+        data: results.reduce((data, cur) => data.concat(cur.data), []),
+      }));
+    }
+    return this.core.get(`${this.resource}?${qs.stringify(query)}`);
   }
-  return this.core.get(this.resource + '?' + qs.stringify(query));
-};
+  /* eslint-enable no-param-reassign */
 
-API.prototype.one = function one(id) {
-  return this.core.get(this.resource + '/' + id);
-};
+  one(id) {
+    return this.core.get(`${this.resource}/${id}`);
+  }
 
-API.prototype.create = function create(body) {
-  return this.core.post(this.resource, body);
-};
+  create(body) {
+    return this.core.post(this.resource, body);
+  }
 
-API.prototype.update = function update(id, body) {
-  return this.core.put(this.resource + '/' + id, body);
-};
+  update(id, body) {
+    return this.core.put(`${this.resource}/${id}`, body);
+  }
 
-API.prototype.destroy = function destroy(id) {
-  return this.core.delete(this.resource + '/' + id);
-};
+  destroy(id) {
+    return this.core.delete(`${this.resource}/${id}`);
+  }
+}
 
-module.exports = API;
+export default API;

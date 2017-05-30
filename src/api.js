@@ -4,25 +4,76 @@ class API {
   constructor(core, resource) {
     this.core = core;
     this.resource = resource;
+    this.pageData = {};
+  }
+
+  getPageData(query) {
+    if (query) {
+      delete query.page; // eslint-disable-line no-param-reassign
+    }
+
+    const key = qs.stringify(query);
+    if (!this.pageData[key]) {
+      this.pageData[key] = {
+        page: 0,
+        totalPages: 999,
+      };
+    }
+    return this.pageData[key];
+  }
+
+  setPageData(query, page, totalPages) {
+    if (query) {
+      delete query.page; // eslint-disable-line no-param-reassign
+    }
+
+    const key = qs.stringify(query);
+    this.pageData[key] = { page, totalPages };
+  }
+
+  pageInfo(query) {
+    if (query) {
+      delete query.page; // eslint-disable-line no-param-reassign
+    }
+    return this.getPageData(qs.stringify(query));
+  }
+
+  next(query) {
+    const pageData = this.getPageData(query);
+    if (pageData.page > pageData.totalPages) {
+      return Promise.resolve([]);
+    }
+    const qString = qs.stringify({ ...query, page: pageData.page + 1 });
+    return this.core.get(`${this.resource}?${qString}`).then((resp) => {
+      this.setPageData(query, pageData.page + 1, Math.ceil(resp.total / resp.perPage));
+      return resp.data;
+    });
+  }
+
+  prev(query) {
+    const pageData = this.getPageData(query);
+    if (pageData.page === 1) {
+      return Promise.resolve([]);
+    }
+    const qString = qs.stringify({ ...query, page: pageData.page - 1 });
+    return this.core.get(`${this.resource}?${qString}`).then((resp) => {
+      this.setPageData(query, pageData - 1, Math.ceil(resp.total / resp.perPage));
+      return resp.data;
+    });
   }
 
   /* eslint-disable no-param-reassign */
-  all(query, actuallyAll) {
-    if (actuallyAll) { // Quick way to get everything unpaginated
-      query.page = 1;
-      return this.core.get(`${this.resource}?${qs.stringify(query)}`).then((results) => {
-        const pages = Math.ceil(results.total / results.perPage);
-        const r = [results];
-        for (let i = 2; i <= pages; i++) { // eslint-disable-line no-plusplus
-          query.page = i;
-          r.push(this.core.get(`${this.resource}?${qs.stringify(query)}`));
-        }
-        return Promise.all(r);
-      }).then(results => ({
-        data: results.reduce((data, cur) => data.concat(cur.data), []),
-      }));
-    }
-    return this.core.get(`${this.resource}?${qs.stringify(query)}`);
+  all(query) {
+    query.page = 1;
+    return this.core.get(`${this.resource}?${qs.stringify(query)}`).then((results) => {
+      const pages = Math.ceil(results.total / results.perPage);
+      const r = [results];
+      for (let i = 2; i <= pages; i++) { // eslint-disable-line no-plusplus
+        query.page = i;
+        r.push(this.core.get(`${this.resource}?${qs.stringify(query)}`));
+      }
+      return Promise.all(r);
+    }).then(results => results.reduce((data, cur) => data.concat(cur.data), []));
   }
   /* eslint-enable no-param-reassign */
 

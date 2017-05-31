@@ -5,6 +5,7 @@ class API {
     this.core = core;
     this.resource = resource;
     this.pageData = {};
+    this.pageQuery = null;
   }
 
   getPageData(query) {
@@ -13,22 +14,18 @@ class API {
     }
 
     const key = qs.stringify(query);
-    if (!this.pageData[key]) {
-      this.pageData[key] = {
+    if (this.pageQuery !== key) {
+      this.pageQuery = key;
+      this.pageData = {
         page: 0,
         totalPages: 999,
       };
     }
-    return this.pageData[key];
+    return this.pageData;
   }
 
-  setPageData(query, page, totalPages) {
-    if (query) {
-      delete query.page; // eslint-disable-line no-param-reassign
-    }
-
-    const key = qs.stringify(query);
-    this.pageData[key] = { page, totalPages };
+  setPageData(page, totalPages) {
+    this.pageData = { page, totalPages };
   }
 
   pageInfo(query) {
@@ -45,7 +42,7 @@ class API {
     }
     const qString = qs.stringify({ ...query, page: pageData.page + 1 });
     return this.core.get(`${this.resource}?${qString}`).then((resp) => {
-      this.setPageData(query, pageData.page + 1, Math.ceil(resp.total / resp.perPage));
+      this.setPageData(pageData.page + 1, Math.ceil(resp.total / resp.perPage));
       return resp.data;
     });
   }
@@ -57,7 +54,7 @@ class API {
     }
     const qString = qs.stringify({ ...query, page: pageData.page - 1 });
     return this.core.get(`${this.resource}?${qString}`).then((resp) => {
-      this.setPageData(query, pageData - 1, Math.ceil(resp.total / resp.perPage));
+      this.setPageData(pageData - 1, Math.ceil(resp.total / resp.perPage));
       return resp.data;
     });
   }

@@ -8,10 +8,8 @@ class API {
     this.pageQuery = null;
   }
 
-  getPageData(query) {
-    if (query) {
-      delete query.page; // eslint-disable-line no-param-reassign
-    }
+  getPageData(query = {}) {
+    delete query.page; // eslint-disable-line no-param-reassign
 
     const key = qs.stringify(query);
     if (this.pageQuery !== key) {
@@ -28,14 +26,12 @@ class API {
     this.pageData = { page, totalPages };
   }
 
-  pageInfo(query) {
-    if (query) {
-      delete query.page; // eslint-disable-line no-param-reassign
-    }
+  pageInfo(query = {}) {
+    delete query.page; // eslint-disable-line no-param-reassign
     return this.getPageData(qs.stringify(query));
   }
 
-  next(query) {
+  next(query = {}) {
     const pageData = this.getPageData(query);
     if (pageData.page > pageData.totalPages) {
       return Promise.resolve([]);
@@ -47,7 +43,7 @@ class API {
     });
   }
 
-  prev(query) {
+  prev(query = {}) {
     const pageData = this.getPageData(query);
     if (pageData.page === 1) {
       return Promise.resolve([]);
@@ -60,7 +56,7 @@ class API {
   }
 
   /* eslint-disable no-param-reassign */
-  all(query) {
+  all(query = {}) {
     query.page = 1;
     return this.core.get(`${this.resource}?${qs.stringify(query)}`).then((results) => {
       const pages = Math.ceil(results.total / results.perPage);

@@ -6,10 +6,10 @@ Client to the API
 To create an API instance:
 
 ```javascript
-var API = require('sse-api-client');
+const API = require('sse-api-client');
 
-var MyInstance = new API('http://URI/to/api/root/');
-var Members = MyInstance.Members;
+const MyInstance = new API('http://URI/to/api/root/');
+const Members = MyInstance.Members;
 
 Members
   .all()

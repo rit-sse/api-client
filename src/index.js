@@ -8,6 +8,7 @@ export default function createAPI(apiRoot) {
 
   this.Auth = new Auth(core);
   this.Agenda = new API('agenda');
+  this.Announcements = new API('announcements');
   this.Committees = new API('committees');
   this.Events = new API('events');
   this.Headcounts = new API('mentoring/headcounts');
